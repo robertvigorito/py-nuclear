@@ -7,10 +7,11 @@ class Callbacks(object):
     Disable `Nuke` callbacks, once the action is complete re-enable the `Nuke`
     callbacks.
     """
-    __slots__ = ()
+    __slots__ = ("__backup", )
+    _BACKUP_VARIABLE = "__backup"
 
     def __init__(self):
-        pass
+        self.__backup = getattr(nuke, self._BACKUP_VARIABLE, dict())
 
     def __call__(self, func):
         """ Method, Disable callback, execute function and re-enable callbacks"""
@@ -24,18 +25,40 @@ class Callbacks(object):
 
     def __enter__(self):
         """ Disable callbacks. """
+        for callback, functions in nuke.callbacks.__dict__.items():
+            # We dont want to remove hidden attributes, also continue
+            # if there are no functions assigned
+            if callback.startswith("_") or not functions:
+                continue
+
+            # Adding to the back and setting empty callback
+            self.__backup[callback] = functions
+            setattr(nuke.callbacks, callback, {})
+
+        # Save the backup data under the nuke module
+        setattr(nuke, self._BACKUP_VARIABLE, self.__backup)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
+        for callback, items in self.__backup.items():
+            setattr(nuke.callbacks, callback, items)
+
+        # Clear the backup and remove the nuke variable
+        self.__backup = dict()
+        # setattr(nuke, self._BACKUP_VARIABLE, {})
+        del nuke.__dict__["__backup"]
 
     def begin(self):
-        pass
+        self.__enter__()
 
     def end(self):
-        pass
+        self.__exit__(None, None, None)
 
     def run(self, func):
         self.__call__(func)
+
+    @staticmethod
+    def decorator(func):
+        return lambda: Callbacks().run(func)
 
 
 class KeepSelected(object):
