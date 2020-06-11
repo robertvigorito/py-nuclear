@@ -83,4 +83,6 @@ deploy:
 	    @mkdir -p .build/scripts;\
 	    install -m 555 -v $(SCRIPTS.FILES) .build/scripts/; \
     fi
-	@git push origin master v$(VERSION)
+	-git tag v$(VERSION)
+	-git push --tags
+
