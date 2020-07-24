@@ -4,7 +4,7 @@
 
 AUTHOR			= rob-v
 PACKAGE			= nuclear
-VERSION 		= 0.1.0
+VERSION 		= 0.2.0-beta.13
 DESCRIPTION 	= Nuke wrapper module
 
 # ---------------------------------------------------
@@ -77,7 +77,8 @@ deploy:
 	$(eval NUKE_TEMP=$(shell echo /software/tools/nuke/$(PACKAGE)/$(VERSION)))
 	@echo Installing Nuke to $(NUKE_TEMP)
 	@mkdir -p $(NUKE_TEMP)
-	@ln -s -f $(NUKE_TEMP) $(shell dirname $(NUKE_TEMP))/latest
+	@-unlink "$(shell dirname $(NUKE_TEMP))/latest"
+	@ln -s "$(NUKE_TEMP)/" "$(shell dirname $(NUKE_TEMP))/latest"
 	@install -v -m 444 $(NUKE.FILES) $(NUKE_TEMP)
 	@if [ $(SCRIPTS.FILES) ]; then\
 	    @mkdir -p .build/scripts;\

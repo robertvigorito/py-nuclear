@@ -1,0 +1,17 @@
+Write {
+ name Write1
+ selected true
+ xpos 21
+ ypos -197
+ addUserKnob {20 WGID}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {68 job l Context: M {"" "" ""}}
+ addUserKnob {68 scene l / -STARTLINE M {""}}
+ addUserKnob {68 shot l / -STARTLINE M {""}}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {4 e_prefix l Prefix: M {""}}
+ addUserKnob {1 e_layer l Layer:}
+ addUserKnob {4 e_version l Version: M {"" "" "" ""}}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {1 name_1 l Name:}
+}
