@@ -10,16 +10,12 @@ python_files = $(shell find $(python_root) -name "*.py")
 all: build clean test install ninstall
 
 build: clean
-	$(eval BUILD_LOCATION=./.build/wgid/$(package))
-	@for file in $(python_files) ; do \
-		new_file="$(BUILD_LOCATION)/$${file#*/*/}" ; \
-		mkdir -p `dirname $$new_file` ; \
-		cp "$$file" "$$new_file"; \
-	done
+	$(eval BUILD_LOCATION=./.build/)
+	pip install . -t $(BUILD_LOCATION)
 
 clean:
 	@echo Cleaning the .build directory
-	@rm -f -r .build
+	@rm -f -r .build .pytest_cache .tox dist
 
 test: clean build
 	@if [ ! -d ~/dev/.wgid/wgid ]; then\
@@ -30,10 +26,10 @@ test: clean build
 ninstall: clean build
 	$(eval install_location=~/.nuke/wgid/)
 	@echo $(install_location)
-	@if [ ! -d ~/dev/.wgid/wgid ]; then\
+	@if [ ! -d $(install_location) ]; then\
 		mkdir -p $(install_location) ; \
 	fi
-	@ln -s `realpath $(python_root)` $(install_location) -f
+	cp -r `realpath $(python_root)` $(install_location)
 
 
 
