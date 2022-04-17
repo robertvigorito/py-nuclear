@@ -3,7 +3,7 @@ name: Changelog CI
 on:
   - push
 jobs:
-  build:
+  changelog:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository
