@@ -1,10 +1,10 @@
 # nuclear
-[![Issues](https://img.shields.io/github/issues/robertvigorito/nuclear.svg?style=for-the-badge)](https://github.com/robertvigorito/nuclear/issues)
-[![MIT License](https://img.shields.io/github/license/robertvigorito/nuclear.svg?style=for-the-badge)](https://github.com/robertvigorito/nuclear/blob/develop/LICENSE)
+[![Issues](https://img.shields.io/github/issues/robertvigorito/nuclear.svg?style=for-the-badge)](https://github.com/robertvigorito/py-nuclear/issues)
+[![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](https://github.com/robertvigorito/py-nuclear/blob/develop/LICENSE)
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555)](https://linkedin.com/in/robvigorito)
 
-[![example workflow](https://github.com/robertvigorito/nuclear/actions/workflows/python-build.yml/badge.svg)](https://github.com/robertvigorito/nuclear/actions)
-[![GitHub tag](https://img.shields.io/github/v/tag/robertvigorito/nuclear?label=Version)](https://github.com/robertvigorito/nuclear/releases)
+[![example workflow](https://github.com/robertvigorito/py-nuclear/actions/workflows/python-build.yml/badge.svg?)](https://github.com/robertvigorito/py-nuclear/actions)
+[![GitHub tag](https://img.shields.io/github/v/tag/robertvigorito/nuclear?label=Version)](https://github.com/robertvigorito/py-nuclear/releases)
 
 ## Introduction
 Nuke wrapper module

@@ -19,7 +19,7 @@ def latest_from_github():
     Returns:
         (str) Latest version from github repo
     """
-    response = requests.get("https://api.github.com/repos/robertvigorito/nuclear/releases/latest")
+    response = requests.get("https://api.github.com/repos/robertvigorito/py-nuclear/releases/latest")
     try:
         latest_release = response.json()["tag_name"].replace("v", "")
     except KeyError:
