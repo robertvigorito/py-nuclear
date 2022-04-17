@@ -1,9 +1,9 @@
-name: Changelog CI
+name: Changelog-CI
 # Controls when the action will run. Triggers the workflow on a pull request
 on:
   - push
 jobs:
-  build:
+  changelog:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository
