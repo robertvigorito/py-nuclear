@@ -1,5 +1,5 @@
 # nuclear
-[![Issues](https://img.shields.io/github/issues/robertvigorito/nuclear.svg?style=for-the-badge)](https://github.com/robertvigorito/py-nuclear/issues)
+[![Issues](https://img.shields.io/github/issues/robertvigorito/py-nuclear.svg?style=for-the-badge)](https://github.com/robertvigorito/py-nuclear/issues)
 [![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](https://github.com/robertvigorito/py-nuclear/blob/develop/LICENSE)
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555)](https://linkedin.com/in/robvigorito)
 
