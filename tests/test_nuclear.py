@@ -5,7 +5,8 @@ import requests
 import subprocess
 import unittest
 
-import nuclear
+# Wgid Imports
+from wgid import nuclear
 
 
 def latest_from_github():
@@ -38,7 +39,7 @@ def test_version():
 
     with open(pyproject, "r") as pyproject_file:
         pyproject_data = toml.load(pyproject_file)
-        toml_version = pyproject_data["tool"]["poetry"]["version"]
+        toml_version = pyproject_data["project"]["version"]
 
     # Compare the pyproject and python module version, than current compare with the release version
     assert toml_version == nuclear.__version__, "pyproject.toml and nuclear.__version__ don't match"

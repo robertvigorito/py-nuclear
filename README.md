@@ -5,7 +5,6 @@
 
 [![example workflow](https://github.com/robertvigorito/py-nuclear/actions/workflows/python-build.yml/badge.svg?)](https://github.com/robertvigorito/py-nuclear/actions)
 [![GitHub tag](https://img.shields.io/github/v/tag/robertvigorito/nuclear?label=Version)](https://github.com/robertvigorito/py-nuclear/releases)
-
 ## Introduction
 Nuke wrapper module
 
