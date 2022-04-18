@@ -1,31 +1,27 @@
-[tool.poetry]
+[project]
 name = "nuclear"
 version = "0.2.0-beta.13"
 description = "Nuke wrapper module"
-authors = ["robert-v <robertvigorito@gmail.com>"]
-
-[tool.poetry.dependencies]
-python = ">=3.7, <3.10"
-PyYAML = "^5.4.1"
-toml = "^0.10.2"
-requests = "^2.25.1"
-PySide2 = "^5.15.2"
-pytest = "^7.1.1"
-
-[tool.poetry.dev-dependencies]
-
-[project.optional-dependencies]
-tests = [
-  'coverage>=5.0.3',
-  'pytest',
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+requires-python = ">=3.6"
+dependencies = [
+    "pytest",
+    "PySide2",
+    "requests",
+    "toml",
+    "PyYAML",
 ]
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.setuptools.package-dir]
+"wgid.nuke.nuclear" = "nuke"
+"wgid.nuclear" = "python"
 
-[flake8]
-max-line-length = 99
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 [tool.tox]
 legacy_tox_ini = """
@@ -37,6 +33,6 @@ envlist = py37, py38, py39
 whitelist_externals = poetry
 commands =
     pip install -U pip
-    poetry install -v
-    poetry run pytest -s -rap tests
+    pip install . pytest
+    pytest -s -rap .
 """

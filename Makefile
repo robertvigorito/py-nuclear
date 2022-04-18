@@ -10,26 +10,19 @@ python_files = $(shell find $(python_root) -name "*.py")
 all: build clean test install ninstall
 
 build: clean
-	$(eval BUILD_LOCATION=./.build/)
+	$(eval BUILD_LOCATION=./.build)
 	pip install . -t $(BUILD_LOCATION)
 
 clean:
 	@echo Cleaning the .build directory
-	@rm -f -r .build .pytest_cache .tox dist
+	@rm -f -r .build .pytest_cache .tox dist *.egg-info build
 
 test: clean build
 	@if [ ! -d ~/dev/.wgid/wgid ]; then\
 		mkdir ~/dev/.wgid/wgid ; \
 	fi
-	@ln -sf `realpath $(python_root)` ~/dev/.wgid/wgid/$(package)
 
-ninstall: clean build
-	$(eval install_location=~/.nuke/wgid/)
-	@echo $(install_location)
-	@if [ ! -d $(install_location) ]; then\
-		mkdir -p $(install_location) ; \
-	fi
-	cp -r `realpath $(python_root)` $(install_location)
-
-
-
+ninstall:
+	$(eval BUILD_LOCATION=~/.nuke/site-packages/)
+	pip install . -t $(BUILD_LOCATION) --upgrade
+	$(MAKE) clean
