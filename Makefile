@@ -1,89 +1,75 @@
-# ---------------------------------------------------
-# Nuclear
-# ---------------------------------------------------
+package=nuclear
 
-AUTHOR			= rob-v
-PACKAGE			= nuclear
-VERSION 		= 0.2.0-beta.13
-DESCRIPTION 	= Nuke wrapper module
+.PHONY: clean build clean-build clean-pyc clean-test docs docs-serve format lint check lint-check install sync test coverage
 
-# ---------------------------------------------------
-# Config
-# ---------------------------------------------------
+clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 
-#NUKE.ROOT = ./python
-#NUKE.FILES = $(shell find $(NUKE.ROOT) -type f -name "*.py")
+build: clean
+	uv build
 
-# ---------------------------------------------------
-# Nuke
-# ---------------------------------------------------
+clean-build: ## remove build artifacts
+	rm -fr out/
+	rm -fr build/
+	rm -fr .build/
+	rm -fr dist/
+	rm -fr .eggs/
+	rm -fr .tox .ruff_cache .mypy_cache
+	rm -fr cov.xml
+	rm -fr coverage.xml
+	rm -fr dump.rdb
+	find . -name '*.egg-info' -exec rm -fr {} +
+	find . -name '*.egg' -exec rm -f {} +
 
-NUKE.ROOT = ./nuke
-NUKE.FILES = $(shell find $(NUKE.ROOT) -type f -name "*.py")
+clean-pyc: ## remove Python file artifacts
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
 
-# ---------------------------------------------------
-# Python
-# ---------------------------------------------------
+clean-test: ## remove test and coverage artifacts
+	rm -fr .tox/
+	rm -f .coverage
+	rm -fr htmlcov/
+	rm -fr .pytest_cache
+	rm -fr tests/.pytest_cache
 
-#SCRIPTS.ROOT = ""
-#SCRIPTS.FILES = $(shell find $(SCRIPTS.ROOT) -type f -name "*.py")
-
-
-# ---------------------------------------------------
-# Resources
-# ---------------------------------------------------
-
-#SCRIPTS.ROOT = ""
-#SCRIPTS.FILES = $(shell find $(SCRIPTS.ROOT) -type f -name "*")
-
-# ---------------------------------------------------
-# Scripts
-# ---------------------------------------------------
-
-#SCRIPTS.ROOT = ""
-#SCRIPTS.FILES = $(shell find $(SCRIPTS.ROOT) -type f -name "*")
+docs: ## build the MkDocs documentation site
+	uv run mkdocs build
 
 
-# ---------------------------------------------------
-# Rules
-# ---------------------------------------------------
+docs-serve: ## preview documentation with live reload
+	uv run mkdocs serve
 
-.PHONY: test all install deploy
 
-all: clean test install
+format: ## apply safe Ruff fixes and format Python files
+	uv run ruff check --fix .
+	uv run ruff format .
+	uv run isort --profile black .
 
-clean:
-	@echo Cleaning the .build directory
-	@rm -f -r .build
 
-install:
-	$(eval TEMP=$(shell echo /software/scripts/$(PACKAGE)/ | tr A-Z a-z))
-	@echo Installing scripts to $(TEMP)
-	@rm -r -f $(TEMP)
-	@mkdir -p $(TEMP)
-	@install -v -m 555 $(SCRIPTS.FILES) $(TEMP)
+lint:
+	uv run ruff check .
+	uv run isort --check-only --profile black .
+	uv run mypy --ignore-missing-imports src
 
-test:
-	$(eval NUKE_TEMP=$(shell echo .build/nuke/$(PACKAGE)/$(VERSION)))
-	@echo Installing Nuke to $(NUKE_TEMP)
-	@mkdir -p $(NUKE_TEMP)
-	@install -v -m 444 $(NUKE.FILES) $(NUKE_TEMP)
-	@if [ $(SCRIPTS.FILES) ]; then\
-	    @mkdir -p .build/scripts;\
-	    install -m 555 -v $(SCRIPTS.FILES) .build/scripts/; \
-    fi
 
-deploy:
-	$(eval NUKE_TEMP=$(shell echo /software/tools/nuke/$(PACKAGE)/$(VERSION)))
-	@echo Installing Nuke to $(NUKE_TEMP)
-	@mkdir -p $(NUKE_TEMP)
-	@-unlink "$(shell dirname $(NUKE_TEMP))/latest"
-	@ln -s "$(NUKE_TEMP)/" "$(shell dirname $(NUKE_TEMP))/latest"
-	@install -v -m 444 $(NUKE.FILES) $(NUKE_TEMP)
-	@if [ $(SCRIPTS.FILES) ]; then\
-	    @mkdir -p .build/scripts;\
-	    install -m 555 -v $(SCRIPTS.FILES) .build/scripts/; \
-    fi
-	-git tag v$(VERSION)
-	-git push --tags
+check:
+	uv run mypy src
+
+
+lint-check: lint check
+
+install: clean
+	uv sync --no-dev
+
+sync: ## install or update the project environment and dependencies
+	uv sync
+
+test: ## run tests quickly with the default Python
+	uv run pytest ./tests
+
+
+coverage: ## create an HTML coverage report
+	uv run pytest ./tests
+	@echo "Coverage HTML report is available at htmlcov/index.html"
 
