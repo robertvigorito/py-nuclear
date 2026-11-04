@@ -1,0 +1,12 @@
+{
+  "FakeNode": {
+    "Three": "test-settings",
+    "four": "test-settings",
+    "two": "test-settings",
+    "twoThree": "test-settings"
+  },
+  "Write": {
+    "Bla": "exr-knob-settings",
+    "Bla2": "exr-knob-settings"
+  }
+}

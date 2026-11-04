@@ -3,8 +3,12 @@
 import nuke  # noqa: I001 -- Nuke provides this host API module.
 
 
-package_menu = nuke.menu("Nuke").addMenu("nuclear")
-package_menu.addCommand(
-    "About",
-    lambda: nuke.message("nuclear Nuke tools"),
+pipeline_menu = nuke.menu("Nodes").addMenu("wgid")
+pipeline_menu.addCommand(
+    "Create Layer Contact Sheet Group",
+    "import nuclear.contactsheet.layer_contact_sheet as contactsheet; contactsheet.create_group()",
+)
+pipeline_menu.addCommand(
+    "Create Custom Write",
+    "import nuclear.custom_write.write as custom_write; custom_write.create()",
 )

@@ -3,7 +3,13 @@ name = "nuclear"
 version = "0.1.0"
 description = "A package that has a mix of nuke related tooling to general 2d pipeline."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11,<4"
+dependencies = [
+    "necessities",
+    "nuix",
+    "qt-py>=2.0.7",
+    "types-nuke>=13.2.8.0",
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -38,4 +44,8 @@ line-length = 120
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
+
+[tool.uv.sources]
+nuix = { path = "../nuix", editable = true }
+necessities = { path = "../necessities" }
 

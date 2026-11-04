@@ -1,0 +1,59 @@
+Group {
+ name LayerContactSheet
+ addUserKnob {20 "Layer Contact Sheet"}
+ addUserKnob {22 build_contact_sheet l "Build / Update Contact Sheet" T "import nuclear.contactsheet.layer_contact_sheet as contactsheet; contactsheet.run(nuke.thisNode())" +STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 format l "output format" T ContactSheetReformt.format}
+ addUserKnob {41 resize l "resize type" T ContactSheetReformt.resize}
+ addUserKnob {41 filter -STARTLINE T ContactSheetReformt.filter}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 rows T LayerContactSheet1.rows}
+ addUserKnob {41 columns l "" -STARTLINE T LayerContactSheet1.columns}
+ addUserKnob {41 autodims l "automatic rows/columns" -STARTLINE T LayerContactSheet1.autodims}
+ addUserKnob {41 colorder l "Column Order" T LayerContactSheet1.colorder}
+ addUserKnob {41 roworder l "Row Order" -STARTLINE T LayerContactSheet1.roworder}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 box T ContactSheetText.box}
+ addUserKnob {41 xjustify l justify T ContactSheetText.xjustify}
+ addUserKnob {41 yjustify l "" -STARTLINE T ContactSheetText.yjustify}
+ addUserKnob {41 global_font_scale l "global font scale" T ContactSheetText.global_font_scale}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -40
+  ypos -100
+ }
+ Dot {
+  name START_DOT
+  xpos -6
+  ypos -37
+ }
+ Text2 {
+  xjustify left
+  yjustify bottom
+  global_font_scale 2
+  box {0 0 {input.width} {input.height} }
+  name ContactSheetText
+  xpos -40
+  ypos -9
+ }
+ LayerContactSheet {
+  width {{"\[python nuke.toNode(\\\"ContactSheetReformt\\\").format().width()]"}}
+  height {{"\[python nuke.toNode(\\\"ContactSheetReformt\\\").format().height()]"}}
+  name LayerContactSheet1
+  xpos -40
+  ypos 15
+ }
+ Reformat {
+  name ContactSheetReformt
+  xpos -40
+  ypos 39
+  black_outside true
+ }
+ Output {
+  name Output1
+  xpos -40
+  ypos 76
+ }
+end_group
