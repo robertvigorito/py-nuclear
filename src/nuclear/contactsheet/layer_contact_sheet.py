@@ -78,7 +78,7 @@ def run(group: Any = None) -> bool:
     for layer_to_remove in {"rgb", "alpha"}:
         layers.remove(layer_to_remove) if layer_to_remove in layers else None
 
-    selected = show_contact_sheet_dialog(group, layers)
+    selected = show_contact_sheet_dialog(layers)
     if selected is None:
         return False
     if not selected:
