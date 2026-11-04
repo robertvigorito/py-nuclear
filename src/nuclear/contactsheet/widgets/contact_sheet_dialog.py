@@ -1,15 +1,9 @@
 """Qt dialog for choosing contact-sheet AOVs and saved presets."""
 
-from __future__ import annotations
-
 import json
 from typing import Any
 
 from Qt import QtCore, QtWidgets
-
-
-_PRESET_KEY = "presets"
-_DEFAULT_FONT = "DejaVu Sans Mono"
 
 
 def _get_presets(settings: QtCore.QSettings) -> dict[str, dict[str, Any]]:
@@ -194,3 +188,6 @@ def show_contact_sheet_dialog(group: Any, layers: list[str]) -> list[str] | None
     if execute() != QtWidgets.QDialog.Accepted:
         return None
     return dialog.selected_layers()
+
+
+

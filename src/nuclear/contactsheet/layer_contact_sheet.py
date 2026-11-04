@@ -4,14 +4,11 @@ from pathlib import Path
 from typing import Any
 
 import nuke
-from nuclear.widgets import show_contact_sheet_dialog
+from nuclear.contactsheet.widgets import show_contact_sheet_dialog
 
 
-def clean_up_previous_nodes(group: nuke.Node) -> bool:
-    """Remove all existing Text2 nodes within the group.
-
-    Args:
-        group: Contact-sheet Group node.
+def clean_up_previous_nodes() -> bool:
+    """Remove all existing Text2 nodes within the current group.
 
     Returns:
         bool: True if any nodes were removed, otherwise False.
@@ -36,18 +33,12 @@ def build_graph(group: Any, selected_layers: list[str], all_layers: list[str]) -
     Returns:
         bool: True if the graph was successfully built, otherwise False.
     """
-    knob_names = ["box", "global_font_scale"]
 
     with group:
-        clean_up_previous_nodes(group)
-
+        clean_up_previous_nodes()
         input_node = nuke.toNode("Input1")
         for layer_to_remove in set(all_layers) - set(selected_layers):
-            input_node = nuke.nodes.Remove(
-                inputs=[input_node],
-                operation="Remove",
-                channels=layer_to_remove,
-            )
+            input_node = nuke.nodes.Remove(inputs=[input_node], operation="Remove", channels=layer_to_remove)
 
         for _, layer in enumerate(selected_layers, start=1):
             label_node = nuke.nodes.Text2(
@@ -58,10 +49,11 @@ def build_graph(group: Any, selected_layers: list[str], all_layers: list[str]) -
                 yjustify=group["yjustify"].value(),
             )
             # Expression link to the main text node
-            for knob_name in knob_names:
+            for knob_name in {"box", "global_font_scale"}:
                 label_node[knob_name].setExpression(f"parent.{knob_name}")
 
             input_node = label_node
+        # Connect the final node to the START_DOT node
         nuke.toNode("START_DOT").setInput(0, input_node)
 
         # Reposition all nodes within the group
@@ -85,10 +77,6 @@ def run(group: Any = None) -> bool:
     layers = list(nuke.layers(group.input(0)))
     for layer_to_remove in {"rgb", "alpha"}:
         layers.remove(layer_to_remove) if layer_to_remove in layers else None
-
-    if not layers:
-        nuke.message("The connected Read node has no AOV layers.")
-        return False
 
     selected = show_contact_sheet_dialog(group, layers)
     if selected is None:
@@ -120,14 +108,3 @@ def create_group(*_, **kwargs) -> nuke.Node | None:
             group[knob_name].setValue(knob_value)
 
     return group
-
-
-# Clear node selection
-import nukescripts
-
-
-nukescripts.clear_selection_recursive()
-nuke.toNode("Read2").setSelected(True)
-group = create_group()
-# run(group)
-build_graph(group, ["C_LS0", "C_LS1", "C_LS2"], nuke.layers(nuke.toNode("Read2")))
