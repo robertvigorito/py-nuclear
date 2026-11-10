@@ -16,8 +16,10 @@ Group {
  addUserKnob {41 box T ContactSheetText.box}
  addUserKnob {41 xjustify l justify T ContactSheetText.xjustify}
  addUserKnob {41 yjustify l "" -STARTLINE T ContactSheetText.yjustify}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 font T ContactSheetText.font}
  addUserKnob {41 global_font_scale l "global font scale" T ContactSheetText.global_font_scale}
-}
+ addUserKnob {26 "" +STARTLINE}}
  Input {
   inputs 0
   name Input1
@@ -33,6 +35,7 @@ Group {
   xjustify left
   yjustify bottom
   global_font_scale 2
+  knobChanged "import nuclear.contactsheet.layer_contact_sheet as contactsheet; contactsheet.knob_changed_callback()"
   box {0 0 {input.width} {input.height} }
   name ContactSheetText
   xpos -40

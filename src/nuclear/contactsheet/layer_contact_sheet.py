@@ -1,10 +1,28 @@
 """Create and build a Group-based Nuke layer contact sheet."""
 
 from pathlib import Path
-from typing import Any
 
 import nuke
 from nuclear.contactsheet.widgets import show_contact_sheet_dialog
+
+
+def knob_changed_callback():
+    """Callback function for when a knob value changes.
+
+    Returns:
+        bool: True if the knob change was handled, otherwise False.
+    """
+    this_knob = nuke.thisKnob()
+    if not this_knob:
+        return False
+    if this_knob.name() not in {"xjustify", "yjustify", "font"}:
+        return
+    for node in nuke.thisNode().parent().nodes():
+        if node.name() == "ContactSheetText":
+            continue
+        if node.knob(this_knob.name()):
+            node[this_knob.name()].fromScript(this_knob.toScript())
+    return True
 
 
 def clean_up_previous_nodes() -> bool:
@@ -22,7 +40,7 @@ def clean_up_previous_nodes() -> bool:
     return removed
 
 
-def build_graph(group: Any, selected_layers: list[str], all_layers: list[str]) -> bool:
+def build_graph(group: nuke.Node, selected_layers: list[str], all_layers: list[str]) -> bool:
     """Build the internal AOV-filter, label, and contact-sheet graph.
 
     Args:
@@ -37,7 +55,11 @@ def build_graph(group: Any, selected_layers: list[str], all_layers: list[str]) -
     with group:
         clean_up_previous_nodes()
         input_node = nuke.toNode("Input1")
+        # Always add rgba
+
         for layer_to_remove in set(all_layers) - set(selected_layers):
+            if layer_to_remove in {"rgb", "alpha"}:
+                continue
             input_node = nuke.nodes.Remove(inputs=[input_node], operation="Remove", channels=layer_to_remove)
 
         for _, layer in enumerate(selected_layers, start=1):
@@ -47,6 +69,7 @@ def build_graph(group: Any, selected_layers: list[str], all_layers: list[str]) -
                 output=layer,
                 xjustify=group["xjustify"].value(),
                 yjustify=group["yjustify"].value(),
+                font=group["font"].value(),
             )
             # Expression link to the main text node
             for knob_name in {"box", "global_font_scale"}:
@@ -63,7 +86,7 @@ def build_graph(group: Any, selected_layers: list[str], all_layers: list[str]) -
     return True
 
 
-def run(group: Any = None) -> bool:
+def run(group: nuke.Node | None = None) -> bool:
     """Display AOV choices and build the selected Group's contact sheet.
 
     Args:
@@ -74,10 +97,10 @@ def run(group: Any = None) -> bool:
     """
     group = group or nuke.thisNode()
 
-    layers = list(nuke.layers(group.input(0)))
-    for layer_to_remove in {"rgb", "alpha"}:
-        layers.remove(layer_to_remove) if layer_to_remove in layers else None
-
+    # Check the inputs since the existing layers might be corrupted by previous run.
+    layers = list(nuke.layers(group.input(0)) or nuke.layers())[
+        3:
+    ]  # Skip the first three default layers (rgba, rgb, alpha)
     selected = show_contact_sheet_dialog(layers)
     if selected is None:
         return False
